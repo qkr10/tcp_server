@@ -103,11 +103,17 @@ int __cdecl main(void)
 		iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
 		if (iResult > 0) {
 			if (strcmp(recvbuf, "new connection") == 0) {
+				if (arr.size() == 100) {
+					sprintf(sendbuf, "-1");
+					send(ClientSocket, sendbuf, DEFAULT_BUFLEN, 0);
+					closesocket(ClientSocket);
+					continue;
+				}
 				arr.push_back({ 0, 0 });
 				sprintf(sendbuf, "%d", arr.size() - 1);
 				printf("new connection\n");
 				printf("send \"%s\" to \"%d\"\n", sendbuf, arr.size() - 1);
-				send(ClientSocket, sendbuf, 200, 0);
+				send(ClientSocket, sendbuf, DEFAULT_BUFLEN, 0);
 			}
 			else {
 				int i, x, y;
